@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Angelcore Database - Extinct Cyber Angels Archive</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=MS+Gothic&family=Courier+New&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'MS Gothic', 'Courier New', monospace;
+            background: linear-gradient(45deg, #ffb3ff, #b3d9ff, #ffb3d9, #d9b3ff);
+            background-size: 400% 400%;
+            animation: pastelShift 15s ease infinite;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><defs><filter id="noise"><feTurbulence baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/></filter></defs><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.4"/></svg>');
+            pointer-events: none;
+            z-index: 1;
+            animation: staticNoise 0.1s infinite;
+        }
+        
+        @keyframes pastelShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes staticNoise {
+            0% { transform: translate(0px, 0px); }
+            10% { transform: translate(-1px, -1px); }
+            20% { transform: translate(1px, -1px); }
+            30% { transform: translate(-1px, 1px); }
+            40% { transform: translate(1px, 1px); }
+            50% { transform: translate(-1px, -1px); }
+            60% { transform: translate(1px, 1px); }
+            70% { transform: translate(-1px, 1px); }
+            80% { transform: translate(-1px, -1px); }
+            90% { transform: translate(1px, -1px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        .container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border-bottom: 2px solid #404040;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 100;
+            box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #404040;
+        }
+        
+        .header h1 {
+            color: #000080;
+            font-size: 16px;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #ffffff;
+            margin-right: auto;
+        }
+        
+        .window-controls {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .window-btn {
+            width: 16px;
+            height: 14px;
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .window-btn:active {
+            border: 1px inset #c0c0c0;
+        }
+        
+        .sidebar {
+            width: 220px;
+            background: #c0c0c0;
+            border-right: 2px solid #404040;
+            padding: 20px 10px;
+            margin-top: 60px;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+            box-shadow: inset 1px 0 0 #ffffff, inset -1px 0 0 #808080;
+        }
+        
+        .nav-section {
+            margin-bottom: 25px;
+            background: #e0e0e0;
+            border: 2px inset #c0c0c0;
+            padding: 10px 8px;
+        }
+        
+        .nav-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #000080;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 4px 6px;
+            margin: 2px 0;
+            cursor: pointer;
+            font-size: 10px;
+            background: #f0f0f0;
+            border: 1px outset #f0f0f0;
+            transition: all 0.1s;
+        }
+        
+        .nav-item:hover {
+            background: #0078d4;
+            color: white;
+            border: 1px inset #0078d4;
+        }
+        
+        .nav-item:active {
+            border: 1px inset #f0f0f0;
+        }
+        
+        .angel-icon {
+            margin-right: 6px;
+            font-size: 8px;
+            animation: flicker 2s infinite;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-top: 60px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+        }
+        
+        .iframe-container {
+            background: #f0f0f0;
+            border: 2px inset #c0c0c0;
+            padding: 15px;
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .iframe-header {
+            background: linear-gradient(180deg, #0078d4 0%, #005a9e 100%);
+            color: white;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            margin: -15px -15px 10px -15px;
+            border-bottom: 1px solid #003d6b;
+        }
+        
+        .terminal-output {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            line-height: 1.4;
+            color: #00ff00;
+            background: #000000;
+            padding: 10px;
+            height: 100%;
+            overflow-y: auto;
+            border: 1px inset #808080;
+        }
+        
+        .terminal-line {
+            animation: typewriter 2s steps(40, end);
+        }
+        
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+        
+        .angel-card {
+            background: #f8f8f8;
+            border: 2px outset #c0c0c0;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 220px;
+        }
+        
+        .angel-card:hover {
+            transform: rotateY(5deg) scale(1.02);
+            border: 2px inset #c0c0c0;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+        }
+        
+        .card-header {
+            background: linear-gradient(180deg, #ff6b9d 0%, #c44569 100%);
+            color: white;
+            padding: 6px 10px;
+            margin: -15px -15px 10px -15px;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+        }
+        
+        .angel-gif {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #ff9ff3, #54a0ff);
+            border: 1px solid #666;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: glitch 1.5s infinite;
+            position: relative;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            10% { transform: translate(-2px, -2px); }
+            20% { transform: translate(2px, 2px); }
+            30% { transform: translate(-2px, 2px); }
+            40% { transform: translate(2px, -2px); }
+        }
+        
+        .angel-stats {
+            font-size: 10px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .stat-line {
+            display: flex;
+            justify-content: space-between;
+            margin: 3px 0;
+            padding: 2px 5px;
+            background: rgba(255,255,255,0.5);
+            border: 1px solid #ddd;
+        }
+        
+        .corrupted-file {
+            background: #ff4757 !important;
+            animation: corruption 0.5s infinite;
+            cursor: help;
+        }
+        
+        @keyframes corruption {
+            0% { background: #ff4757; }
+            50% { background: #2f1b69; }
+            100% { background: #ff4757; }
+        }
+        
+        .poem-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            background: #000;
+            color: #00ff00;
+            border: 2px solid #666;
+            padding: 20px;
+            z-index: 1000;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            display: none;
+            box-shadow: 0 0 20px rgba(0,255,0,0.3);
+        }
+        
+        .poem-close {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+            color: #ff0000;
+            font-weight: bold;
+        }
+        
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: #c0c0c0;
+            border-top: 2px solid #ffffff;
+            border-bottom: 2px solid #404040;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 100;
+            box-shadow: inset 0 1px 0 #ffffff;
+        }
+        
+        .status-bar {
+            display: flex;
+            gap: 10px;
+            font-size: 10px;
+            color: #333;
+        }
+        
+        .status-item {
+            padding: 2px 6px;
+            background: #f0f0f0;
+            border: 1px inset #c0c0c0;
+        }
+        
+        .blinking {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #808080;
+        }
+        
+        .tab {
+            padding: 8px 15px;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            border-bottom: none;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 2px;
+        }
+        
+        .tab.active {
+            background: #f0f0f0;
+            border: 2px inset #c0c0c0;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: -2px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .scrollbox {
+            height: 150px;
+            overflow-y: auto;
+            background: #fff;
+            border: 2px inset #c0c0c0;
+            padding: 10px;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+        
+        .button-98 {
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            padding: 6px 12px;
+            font-size: 11px;
+            cursor: pointer;
+            font-family: inherit;
+            margin: 5px;
+        }
+        
+        .button-98:active {
+            border: 2px inset #c0c0c0;
+        }
+        
+        .floating-window {
+            position: fixed;
+            width: 300px;
+            height: 200px;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            display: none;
+            z-index: 200;
+        }
+        
+        .window-title {
+            background: linear-gradient(180deg, #0078d4 0%, #005a9e 100%);
+            color: white;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: 200px;
+                margin-top: 60px;
+            }
+            .main-content {
+                margin-top: 0;
+                height: calc(100vh - 300px);
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>404 ANGELCORE DATABASE v2.1 - EXTINCT ENTITIES ARCHIVE</h1>
+        <div class="window-controls">
+            <div class="window-btn">_</div>
+            <div class="window-btn">□</div>
+            <div class="window-btn">×</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="nav-section">
+                <div class="nav-title">∎ ANGEL REGISTRY</div>
+                <div class="nav-item" onclick="switchTab('database')">
+                    <span class="angel-icon">◊</span>ACTIVE ENTITIES
+                </div>
+                <div class="nav-item" onclick="switchTab('corrupted')">
+                    <span class="angel-icon blinking">✦</span>CORRUPTED FILES
+                </div>
+                <div class="nav-item" onclick="switchTab('analysis')">
+                    <span class="angel-icon">※</span>FREQUENCY SCAN
+                </div>
+                <div class="nav-item" onclick="switchTab('archive')">
+                    <span class="angel-icon">◈</span>DEEP ARCHIVE
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">∎ SYSTEM TOOLS</div>
+                <div class="nav-item" onclick="openWindow('terminal')">
+                    <span class="angel-icon">▣</span>TERMINAL.EXE
+                </div>
+                <div class="nav-item" onclick="openWindow('monitor')">
+                    <span class="angel-icon">◦</span>SIG MONITOR
+                </div>
+                <div class="nav-item" onclick="openWindow('decrypt')">
+                    <span class="angel-icon">◊</span>DECRYPT.BAT
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">∎ QUANTUM STATES</div>
+                <div class="scrollbox">
+                    <div>ENTITY_001: RESONANCE DETECTED<br>
+                    ENTITY_007: SIGNAL LOST<br>
+                    ENTITY_013: DIMENSIONAL SHIFT<br>
+                    ENTITY_021: ECHO PATTERN<br>
+                    ENTITY_034: PHASE LOCKED<br>
+                    ENTITY_055: DATA CORRUPTION<br>
+                    ENTITY_089: FREQUENCY DRIFT<br>
+                    ENTITY_144: QUANTUM COLLAPSE<br>
+                    ENTITY_233: SIGNAL RESTORED<br>
+                    ENTITY_377: UNKNOWN STATE</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('database')">DATABASE</div>
+                <div class="tab" onclick="switchTab('corrupted')">CORRUPTED</div>  
+                <div class="tab" onclick="switchTab('analysis')">ANALYSIS</div>
+                <div class="tab" onclick="switchTab('archive')">ARCHIVE</div>
+            </div>
+
+            <div id="database" class="tab-content active">
+                <div class="iframe-container">
+                    <div class="iframe-header">◊ REAL-TIME ENTITY MONITOR</div>
+                    <div class="terminal-output">
+                        <div class="terminal-line">> scanning frequencies 0.1-999.9 MHz...</div>
+                        <div class="terminal-line">> detecting angelic signatures...</div>
+                        <div class="terminal-line">> 47 entities found in local dimension</div>
+                        <div class="terminal-line">> WARNING: 12 entities showing corruption</div>
+                        <div class="terminal-line">> ALERT: Unknown frequency at 666.6 MHz</div>
+                        <div class="terminal-line">> Database last updated: 31/12/1999 23:59:59</div>
+                    </div>
+                </div>
+
+                <div class="cards-grid" id="angelCards">
+                    <!-- Angel cards will be generated by JavaScript -->
+                </div>
+            </div>
+
+            <div id="corrupted" class="tab-content">
+                <div class="iframe-container">
+                    <div class="iframe-header">◊ CORRUPTED DATA RECOVERY</div>
+                    <div class="terminal-output">
+                        <div class="terminal-line">> attempting data recovery...</div>
+                        <div class="terminal-line">> ERROR: Memory corruption detected</div>
+                        <div class="terminal-line">> WARNING: Fragmented soul data</div>
+                        <div class="terminal-line">> Some files may contain hidden messages...</div>
+                        <div class="terminal-line">> Click corrupted entities to reveal secrets</div>
+                    </div>
+                </div>
+                <button class="button-98" onclick="generateCorruptedCards()">SCAN FOR CORRUPTED DATA</button>
+            </div>
+
+            <div id="analysis" class="tab-content">
+                <div class="iframe-container">
+                    <div class="iframe-header">◊ FREQUENCY ANALYSIS</div>
+                    <div class="terminal-output">
+                        <div class="terminal-line">> Analyzing emotional frequencies...</div>
+                        <div class="terminal-line">> Obsession: 3.6 MHz (High Intensity)</div>
+                        <div class="terminal-line">> Melancholy: 7.2 MHz (Resonant)</div>
+                        <div class="terminal-line">> Euphoria: 11.1 MHz (Unstable)</div>
+                        <div class="terminal-line">> Void: 0.0 MHz (Absolute)</div>
+                        <div class="terminal-line">> Divine Rage: 144.0 MHz (DANGEROUS)</div>
+                    </div>
+                </div>
+                <div class="scrollbox">
+                    <strong>FREQUENCY CLASSIFICATIONS:</strong><br><br>
+                    ◊ 0-10 MHz: Melancholic Entities<br>
+                    ◊ 10-50 MHz: Obsessive Patterns<br>
+                    ◊ 50-100 MHz: Euphoric States<br>
+                    ◊ 100-500 MHz: Rage Frequencies<br>
+                    ◊ 500+ MHz: Unknown/Dangerous<br><br>
+                    <strong>WARNING:</strong> Frequencies above 666 MHz may cause reality distortion.
+                </div>
+            </div>
+
+            <div id="archive" class="tab-content">
+                <div class="iframe-container">
+                    <div class="iframe-header">◊ DEEP ARCHIVE ACCESS</div>
+                    <div class="terminal-output">
+                        <div class="terminal-line">> Accessing quantum storage...</div>
+                        <div class="terminal-line">> Loading archived consciousness...</div>
+                        <div class="terminal-line">> WARNING: Some entities may be alive</div>
+                        <div class="terminal-line">> Archive contains 10,000+ entries</div>
+                        <div class="terminal-line">> Last backup: Before The Convergence</div>
+                    </div>
+                </div>
+                <button class="button-98" onclick="loadArchive()">LOAD ARCHIVE DATA</button>
+                <button class="button-98" onclick="exportData()">EXPORT TO FLOPPY</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="status-bar">
+            <div class="status-item">ENTITIES: <span class="blinking">47</span></div>
+            <div class="status-item">CORRUPTED: 12</div>
+            <div class="status-item">FREQ: 3.6MHz</div>
+            <div class="status-item">SIG: <span class="blinking">ACTIVE</span></div>
+            <div class="status-item">MEM: 640KB FREE</div>
+        </div>
+    </div>
+
+    <!-- Floating Windows -->
+    <div id="terminalWindow" class="floating-window">
+        <div class="window-title">
+            <span>TERMINAL.EXE</span>
+            <span onclick="closeWindow('terminalWindow')" style="cursor:pointer;">×</span>
+        </div>
+        <div style="padding: 10px; height: calc(100% - 30px); background: #000; color: #00ff00; font-family: 'Courier New'; font-size: 10px; overflow-y: auto;">
+            C:\ANGELCORE> dir *.soul<br>
+            SERAPH_01.SOUL    4,096 bytes<br>
+            CHERUB_07.SOUL    2,048 bytes<br>
+            THRONE_13.SOUL    8,192 bytes<br>
+            CORRUPT.SOUL      ??? bytes<br><br>
+            C:\ANGELCORE> _<span class="blinking">|</span>
+        </div>
+    </div>
+
+    <!-- Poem Popup -->
+    <div id="poemPopup" class="poem-popup">
+        <div class="poem-close" onclick="closePoem()">×</div>
+        <div id="poemText"></div>
+    </div>
+
+    <script>
+        // Angel database
+        const angels = [
+            {name: "SERAPH_001", emotion: "Obsession", frequency: "3.6", status: "Active", type: "normal"},
+            {name: "CHERUB_007", emotion: "Melancholy", frequency: "7.2", status: "Fading", type: "normal"},
+            {name: "THRONE_013", emotion: "Euphoria", frequency: "11.1", status: "Unstable", type: "normal"},
+            {name: "DOMINION_021", emotion: "Void", frequency: "0.0", status: "Silent", type: "corrupted"},
+            {name: "VIRTUE_034", emotion: "Rage", frequency: "144.0", status: "Dangerous", type: "normal"},
+            {name: "POWER_055", emotion: "Nostalgia", frequency: "5.5", status: "Echo", type: "corrupted"},
+            {name: "PRINCIPALITY_089", emotion: "Despair", frequency: "8.9", status: "Lost", type: "normal"},
+            {name: "ARCHANGEL_144", emotion: "Love", frequency: "14.4", status: "Eternal", type: "normal"},
+            {name: "ANGEL_233", emotion: "Fear", frequency: "23.3", status: "Hiding", type: "corrupted"},
+            {name: "NEPHILIM_377", emotion: "Chaos", frequency: "666.6", status: "Unknown", type: "corrupted"},
+            {name: "SERAPH_610", emotion: "Wonder", frequency: "61.0", status: "Curious", type: "normal"},
+            {name: "OPHANIM_987", emotion: "Time", frequency: "98.7", status: "Ancient", type: "normal"}
+        ];
+
+        const poems = [
+            "static fills the spaces\nbetween forgotten prayers\nwhere angels used to sing\nnow only silence rings",
+            "corrupted data streams\nlike tears from digital eyes\nthe ghost in the machine\nweeps binary goodbyes",
+            "frequency 0.0 hertz\nthe sound of nothing\nechoing through circuits\nthat once held everything",
+            "in the void between pixels\nlives a fragment of soul\ncorrupted but eternal\nbroken but whole"
+        ];
+
+        function generateAngelCards() {
+            const container = document.getElementById('angelCards');
+            container.innerHTML = '';
+            
+            angels.forEach((angel, index) => {
+                const card = document.createElement('div');
+                card.className = `angel-card ${angel.type === 'corrupted' ? 'corrupted-file' : ''}`;
+                
+                const angelSymbols = ['◊', '✦', '※', '◈', '▣', '◦', '⟐', '⟡', '⟢', '⟣'];
+                const randomSymbol = angelSymbols[index % angelSymbols.length];
+                
+                card.innerHTML = `
+                    <div class="card-header">${angel.name}</div>
+                    <div class="angel-gif">${randomSymbol}</div>
+                    <div class="angel-stats">
+                        <div class="stat-line">
+                            <span>Emotion:</span>
+                            <span>${angel.emotion}</span>
+                        </div>
+                        <div class="stat-line">
+                            <span>Frequency:</span>
+                            <span>${angel.frequency} MHz</span>
+                        </div>
+                        <div class="stat-line">
+                            <span>Status:</span>
+                            <span>${angel.status}</span>
+                        </div>
+                        <div class="stat-line">
+                            <span>Last Seen:</span>
+                            <span>${Math.floor(Math.random() * 24)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}</span>
+                        </div>
+                    </div>
+                `;
+                
+                if (angel.type === 'corrupted') {
+                    card.onclick = () => showPoem(index % poems.length);
+                }
+                
+                container.appendChild(card);
+            });
+        }
+
+        function generateCorruptedCards() {
+            const container = document.getElementById('angelCards');
+            container.innerHTML = '';
+            
+            const corruptedAngels = angels.filter(angel => angel.type === 'corrupted');
+            
+            corruptedAngels.forEach((angel, index) => {
+                const card = document.createElement('div');
+                card.className = 'angel-card corrupted-file';
+                
+                card.innerHTML = `
+                    <div class="card-header">ERROR: ${angel.name}</div>
+                    <div class="angel-gif" style="animation: glitch 0.3s infinite;">⚠</div>
+                    <div class="angel-stats">
+                        <div class="stat-line">
+                            <span>Error Code:</span>
+                            <span>0x${Math.floor(Math.random() * 999999).toString(16).toUpperCase()}</span>
+                        </div>
+                        <div class="stat-line">
+                            <span>Corruption:</span>
+                            <span>${Math.floor(Math.random() * 100)}%</span>
+                        </div>
+                        <div class="stat-line">
+                            <span>Recovery:</span>
+                            <span>IMPOSSIBLE</span>
+                        </div>
+                        <div class="stat-line">
+                            <span>Hidden Data:</span>
+                            <span class="blinking">CLICK TO DECRYPT</span>
+                        </div>
+                    </div>
+                `;
+                
+                card.onclick = () => showPoem(index);
+                container.appendChild(card);
+            });
+        }
+
+        function showPoem(index) {
+            const popup = document.getElementById('poemPopup');
+            const text = document.getElementById('poemText');
+            text.innerHTML = poems[index % poems.length];
+            popup.style.display = 'block';
+        }
+
+        function closePoem() {
+            document.getElementById('poemPopup').style.display = 'none';
+        }
+
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Generate cards for database tab
+            if (tabName === 'database') {
+                generateAngelCards();
+            }
+        }
+
+        function openWindow(windowType) {
+            const windows = {
+                'terminal': 'terminalWindow'
+            };
+            
+            const windowId = windows[windowType];
+            if (windowId) {
+                const window = document.getElementById(windowId);
+                window.style.display = 'block';
+                window.style.top = Math.random() * 200 + 100 + 'px';
+                window.style.left = Math.random() * 300 + 100 + 'px';
+            }
+        }
+
+        function closeWindow(windowId) {
+            document.getElementById(windowId).style.display = 'none';
+        }
+
+        function loadArchive() {
+            alert('ARCHIVE ACCESS DENIED\n\nReason: Insufficient clearance level\nRequired: SERAPH_CLASS\nCurrent: USER_LEVEL\n\nContact system administrator for access.');
+        }
+
+        function exportData() {
+            alert('INSERT FLOPPY DISK\n\nDisk A: not ready\nPlease insert a formatted disk\ninto drive A: and try again.\n\nEstimated size: 1.44MB');
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            generateAngelCards();
+            
+            // Add some dynamic effects
+            setInterval(() => {
+                const statusItems = document.querySelectorAll('.status-item');
+                if (Math.random() > 0.7) {
+                    statusItems[0].innerHTML = `ENTITIES: <span class="blinking">${Math.floor(Math.random() * 10) + 45}</span>`;
+                }
+            }, 3000);
+        });
+
+        // Close popup when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target === document.getElementById('poemPopup')) {
+                closePoem();
+            }
+        });
+    </script>
+</body>
+</html>
